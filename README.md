@@ -1,5 +1,7 @@
 # Method Override
 
+Lets you use HTTP verbs such as PUT or DELETE in places you normally can't. It does so by checking either the x-http-method-override header or a key provided in the request's body.
+
 Previously `connect.methodOverride()`.
 
 Usage:
