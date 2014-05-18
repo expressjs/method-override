@@ -1,5 +1,5 @@
-unreleased
-==========
+1.0.1 / 2014-05-17
+==================
 
   * deps: pin dependency versions
 
