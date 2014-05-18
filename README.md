@@ -4,12 +4,30 @@ Lets you use HTTP verbs such as PUT or DELETE in places you normally can't. It d
 
 Previously `connect.methodOverride()`.
 
-Usage:
+## Install
+
+```sh
+$ npm install method-override
+```
+
+## API
+
+### methodOverride(key)
+
+#### key
+
+This is the property to look for the overwritten method in the `req.body` object.
+This defaults to `"_method"`.
+
+## Examples
 
 ```js
-var app = require('connect');
-app.use(require('body-parser')());
-app.use(require('method-override')())
+var bodyParser = require('body-parser')
+var connect = require('connect')
+var methodOverride = require('method-override')
+
+app.use(bodyParser())
+app.use(methodOverride())
 ```
 
 ## License
