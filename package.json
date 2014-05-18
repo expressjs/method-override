@@ -18,13 +18,13 @@
     "url": "https://github.com/expressjs/method-override/issues"
   },
   "dependencies": {
-    "methods": "*"
+    "methods": "1.0.0"
   },
   "devDependencies": {
-    "mocha": "^1.17.0",
-    "should": "^3.0.0",
-    "supertest": "*",
-    "connect": "*"
+    "connect": "~2.16.0",
+    "mocha": "~1.18.2",
+    "should": "~3.3.1",
+    "supertest": "~0.12.1"
   },
   "scripts": {
     "test": "make test"
