@@ -25,6 +25,9 @@
     "mocha": "~1.18.2",
     "supertest": "~0.12.1"
   },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
   "scripts": {
     "test": "mocha --reporter spec"
   }
