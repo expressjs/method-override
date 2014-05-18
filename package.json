@@ -1,6 +1,6 @@
 {
   "name": "method-override",
-  "description": "method override",
+  "description": "Override HTTP verbs",
   "version": "1.0.0",
   "author": {
     "name": "Jonathan Ong",
