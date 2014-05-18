@@ -12,6 +12,10 @@ $ npm install method-override
 
 ## API
 
+**NOTE** It is very important that this module is used **before** any module that
+needs to know the method of the request (for example, it _must_ be used prior to
+the `csurf` module).
+
 ### methodOverride(key)
 
 #### key
