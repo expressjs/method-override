@@ -23,10 +23,9 @@
   "devDependencies": {
     "connect": "~2.16.0",
     "mocha": "~1.18.2",
-    "should": "~3.3.1",
     "supertest": "~0.12.1"
   },
   "scripts": {
-    "test": "make test"
+    "test": "mocha --reporter spec"
   }
 }
