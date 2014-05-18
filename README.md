@@ -1,6 +1,6 @@
 # method-override [![Build Status](https://travis-ci.org/expressjs/method-override.svg)](https://travis-ci.org/expressjs/method-override) [![NPM version](https://badge.fury.io/js/method-override.svg)](http://badge.fury.io/js/method-override)
 
-Lets you use HTTP verbs such as PUT or DELETE in places you normally can't. It does so by checking either the x-http-method-override header or a key provided in the request's body.
+Lets you use HTTP verbs such as PUT or DELETE in places you normally can't.
 
 Previously `connect.methodOverride()`.
 
@@ -17,6 +17,16 @@ needs to know the method of the request (for example, it _must_ be used prior to
 the `csurf` module).
 
 ### methodOverride(key)
+
+Create a new middleware function to override the `req.method` property with a new
+value. This value will be pulled from the `X-HTTP-Method-Override` header of the
+request. If this header is not present, then this module will look in the `req.body`
+object for a property name given by the `key` argument (and if found, will delete
+the property from `req.body`).
+
+If the found method is supported by node.js core, then `req.method` will be set to
+this value, as if it has originally been that value. The previous `req.method`
+value will be stored in `req.originalMethod`.
 
 #### key
 
