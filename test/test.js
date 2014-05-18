@@ -1,21 +1,18 @@
 
-var connect = require('connect');
-var request = require('supertest');
-
-var app = connect();
-var server = app.listen();
-
-app.use(require('../')());
-
-app.use(function(req, res){
-  res.end(req.method);
-});
+var http = require('http')
+var methodOverride = require('..')
+var request = require('supertest')
 
 describe('methodOverride()', function(){
+  var server
+  before(function () {
+    server = createServer()
+  })
+
   it('should not touch the method by default', function(done){
     request(server)
     .get('/')
-    .expect('GET', done);
+    .expect(200, 'GET', done)
   })
 
   it('should be case in-sensitive', function(done){
@@ -23,7 +20,7 @@ describe('methodOverride()', function(){
     .post('/')
     .set('Content-Type', 'application/x-www-form-urlencoded')
     .set('X-HTTP-Method-Override', 'DELETE')
-    .expect('DELETE', done);
+    .expect(200, 'DELETE', done)
   })
 
   it('should ignore invalid methods', function(done){
@@ -31,6 +28,16 @@ describe('methodOverride()', function(){
     .post('/')
     .set('Content-Type', 'application/x-www-form-urlencoded')
     .set('X-HTTP-Method-Override', 'POST')
-    .expect('POST', done);
+    .expect(200, 'POST', done)
   })
 })
+
+function createServer() {
+  var _override = methodOverride()
+  return http.createServer(function (req, res) {
+    _override(req, res, function (err) {
+      res.statusCode = err ? 500 : 200
+      res.end(err ? err.message : req.method)
+    })
+  })
+}

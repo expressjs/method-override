@@ -21,7 +21,6 @@
     "methods": "1.0.0"
   },
   "devDependencies": {
-    "connect": "~2.16.0",
     "mocha": "~1.18.2",
     "supertest": "~0.12.1"
   },
