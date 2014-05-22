@@ -21,7 +21,7 @@
     "methods": "1.0.0"
   },
   "devDependencies": {
-    "mocha": "~1.18.2",
+    "mocha": "~1.19.0",
     "supertest": "~0.12.1"
   },
   "engines": {
