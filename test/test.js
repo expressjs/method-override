@@ -12,32 +12,78 @@ describe('methodOverride()', function(){
   it('should not touch the method by default', function(done){
     request(server)
     .get('/')
-    .expect(200, 'GET', done)
+    .expect('X-Got-Method', 'GET', done)
   })
 
-  it('should be case in-sensitive', function(done){
-    request(server)
-    .post('/')
-    .set('Content-Type', 'application/x-www-form-urlencoded')
-    .set('X-HTTP-Method-Override', 'DELETE')
-    .expect(200, 'DELETE', done)
+  describe('with body', function(){
+    it('should be case in-sensitive', function(done){
+      var server = createServer('_method', {
+        _method: 'DELETE'
+      })
+
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .expect('X-Got-Method', 'DELETE', done)
+    })
+
+    it('should ignore invalid methods', function(done){
+      var server = createServer('_method', {
+        _method: 'BOGUS'
+      })
+
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .expect('X-Got-Method', 'POST', done)
+    })
+
+    it('should remove key from req.body', function(done){
+      var server = createServer('_method', {
+        foo: 'bar',
+        _method: 'DELETE'
+      })
+
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .expect('X-Got-Method', 'DELETE')
+      .expect(200, '{"foo":"bar"}', done)
+    })
   })
 
-  it('should ignore invalid methods', function(done){
-    request(server)
-    .post('/')
-    .set('Content-Type', 'application/x-www-form-urlencoded')
-    .set('X-HTTP-Method-Override', 'POST')
-    .expect(200, 'POST', done)
+  describe('with header', function(){
+    var server
+    before(function () {
+      server = createServer()
+    })
+
+    it('should be case in-sensitive', function(done){
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .set('X-HTTP-Method-Override', 'DELETE')
+      .expect('X-Got-Method', 'DELETE', done)
+    })
+
+    it('should ignore invalid methods', function(done){
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .set('X-HTTP-Method-Override', 'BOGUS')
+      .expect('X-Got-Method', 'POST', done)
+    })
   })
 })
 
-function createServer() {
-  var _override = methodOverride()
+function createServer(key, _body) {
+  var _override = methodOverride(key)
   return http.createServer(function (req, res) {
+    req.body = _body
     _override(req, res, function (err) {
       res.statusCode = err ? 500 : 200
-      res.end(err ? err.message : req.method)
+      res.setHeader('X-Got-Method', req.method)
+      res.end(err ? err.message : JSON.stringify(req.body))
     })
   })
 }
