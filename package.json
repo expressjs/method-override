@@ -27,6 +27,7 @@
     "methods": "1.0.0"
   },
   "devDependencies": {
+    "istanbul": "0.2.10",
     "mocha": "~1.19.0",
     "supertest": "~0.12.1"
   },
@@ -34,6 +35,8 @@
     "node": ">= 0.8.0"
   },
   "scripts": {
-    "test": "mocha --reporter spec"
+    "test": "mocha --reporter dot test/",
+    "test-cov": "istanbul cover node_modules/mocha/bin/_mocha -- --reporter dot test/",
+    "test-travis": "istanbul cover node_modules/mocha/bin/_mocha --report lcovonly -- --reporter spec test/"
   }
 }
