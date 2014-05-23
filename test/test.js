@@ -99,6 +99,14 @@ describe('methodOverride()', function(){
       .set('X-HTTP-Method-Override', 'BOGUS')
       .expect('X-Got-Method', 'POST', done)
     })
+
+    it('should handle multiple headers', function(done){
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .set('X-HTTP-Method-Override', 'DELETE, PUT')
+      .expect('X-Got-Method', 'DELETE', done)
+    })
   })
 })
 

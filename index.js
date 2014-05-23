@@ -28,7 +28,9 @@ var methods = require('methods');
 module.exports = function methodOverride(key){
   key = key || '_method';
   return function methodOverride(req, res, next) {
-    var method;
+    var method
+    var val
+
     req.originalMethod = req.originalMethod || req.method;
 
     // req.body
@@ -38,7 +40,11 @@ module.exports = function methodOverride(key){
     }
 
     // check X-HTTP-Method-Override
-    method = req.headers['x-http-method-override'] || method
+    val = req.headers['x-http-method-override']
+    if (val) {
+      // multiple headers get joined with comma by node.js core
+      method = val.split(/ *, */)
+    }
 
     if (Array.isArray(method)) {
       method = method[0]

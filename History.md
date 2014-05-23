@@ -2,6 +2,7 @@ unreleased
 ==========
 
   * Handle `req.body` key referencing array or object
+  * Handle multiple HTTP headers
 
 1.0.1 / 2014-05-17
 ==================
