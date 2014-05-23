@@ -33,14 +33,17 @@ module.exports = function methodOverride(key){
 
     // req.body
     if (req.body && typeof req.body === 'object' && key in req.body) {
-      method = req.body[key].toLowerCase();
+      method = req.body[key];
       delete req.body[key];
     }
 
     // check X-HTTP-Method-Override
     if (req.headers['x-http-method-override']) {
-      method = req.headers['x-http-method-override'].toLowerCase();
+      method = req.headers['x-http-method-override'];
     }
+
+    if (Array.isArray(method)) method = method.pop();
+    if (method) method = method.toLowerCase();
 
     // replace
     if (supports(method)) req.method = method.toUpperCase();
