@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * Handle `req.body` key referencing array or object
+
 1.0.1 / 2014-05-17
 ==================
 

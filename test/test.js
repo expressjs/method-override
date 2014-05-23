@@ -18,7 +18,7 @@ describe('methodOverride()', function(){
   describe('with body', function(){
     it('should be case in-sensitive', function(done){
       var server = createServer('_method', {
-        _method: 'DELETE'
+        _method: 'DELete'
       })
 
       request(server)
@@ -50,6 +50,32 @@ describe('methodOverride()', function(){
       .expect('X-Got-Method', 'DELETE')
       .expect(200, '{"foo":"bar"}', done)
     })
+
+    it('should handle key referencing array', function(done){
+      var server = createServer('_method', {
+        foo: 'bar',
+        _method: ['DELETE', 'PUT']
+      })
+
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .expect('X-Got-Method', 'DELETE')
+      .expect(200, '{"foo":"bar"}', done)
+    })
+
+    it('should handle key referencing object', function(done){
+      var server = createServer('_method', {
+        foo: 'bar',
+        _method: {}
+      })
+
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .expect('X-Got-Method', 'POST')
+      .expect(200, '{"foo":"bar"}', done)
+    })
   })
 
   describe('with header', function(){
@@ -62,7 +88,7 @@ describe('methodOverride()', function(){
       request(server)
       .post('/')
       .set('Content-Type', 'application/json')
-      .set('X-HTTP-Method-Override', 'DELETE')
+      .set('X-HTTP-Method-Override', 'DELete')
       .expect('X-Got-Method', 'DELETE', done)
     })
 

@@ -26,24 +26,28 @@ var methods = require('methods');
  */
 
 module.exports = function methodOverride(key){
-  key = key || "_method";
+  key = key || '_method';
   return function methodOverride(req, res, next) {
     var method;
     req.originalMethod = req.originalMethod || req.method;
 
     // req.body
     if (req.body && typeof req.body === 'object' && key in req.body) {
-      method = req.body[key].toLowerCase();
-      delete req.body[key];
+      method = req.body[key]
+      delete req.body[key]
     }
 
     // check X-HTTP-Method-Override
-    if (req.headers['x-http-method-override']) {
-      method = req.headers['x-http-method-override'].toLowerCase();
+    method = req.headers['x-http-method-override'] || method
+
+    if (Array.isArray(method)) {
+      method = method[0]
     }
 
     // replace
-    if (supports(method)) req.method = method.toUpperCase();
+    if (supports(method)) {
+      req.method = method.toUpperCase()
+    }
 
     next();
   };
@@ -54,5 +58,7 @@ module.exports = function methodOverride(key){
  */
 
 function supports(method) {
-  return ~methods.indexOf(method);
+  return method
+    && typeof method === 'string'
+    && methods.indexOf(method.toLowerCase()) !== -1
 }
