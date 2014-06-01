@@ -4,9 +4,7 @@
 [![Build Status](https://travis-ci.org/expressjs/method-override.svg?branch=master)](https://travis-ci.org/expressjs/method-override)
 [![Coverage Status](https://img.shields.io/coveralls/expressjs/method-override.svg?branch=master)](https://coveralls.io/r/expressjs/method-override)
 
-Lets you use HTTP verbs such as PUT or DELETE in places you normally can't.
-
-Previously `connect.methodOverride()`.
+Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
 
 ## Install
 
@@ -20,32 +18,77 @@ $ npm install method-override
 needs to know the method of the request (for example, it _must_ be used prior to
 the `csurf` module).
 
-### methodOverride(key)
+### methodOverride(getter)
 
 Create a new middleware function to override the `req.method` property with a new
-value. This value will be pulled from the `X-HTTP-Method-Override` header of the
-request. If this header is not present, then this module will look in the `req.body`
-object for a property name given by the `key` argument (and if found, will delete
-the property from `req.body`).
+value. This value will be pulled from the provided `getter`.
+
+- `getter` - The getter to use to look up the overridden request method for the request. (default: `_method`)
 
 If the found method is supported by node.js core, then `req.method` will be set to
 this value, as if it has originally been that value. The previous `req.method`
 value will be stored in `req.originalMethod`.
 
-#### key
+#### getter
 
-This is the property to look for the overwritten method in the `req.body` object.
-This defaults to `"_method"`.
+This is the method of getting the override value from the request. If a function is provided,
+the `req` is passed as the first argument and the method is expected to be returned. If a
+string is provided, the string is used to look up the method with the following rules:
+
+- If the string starts with `X-`, then it is treated as the name of a header and that header
+  is used for the method override. If the request contains the same header multiple times, the
+  first occurrence is used.
+- All other strings are treated as a property in `req.body`. If the property exists in `req.body`,
+  it is read and the entry is deleted from `req.body` for seamless method overrides in the body.
 
 ## Examples
 
+### override in POST bodies
+
 ```js
-var bodyParser = require('body-parser')
-var connect = require('connect')
+var bodyParser     = require('body-parser')
+var connect        = require('connect')
 var methodOverride = require('method-override')
 
-app.use(bodyParser())
-app.use(methodOverride())
+// override with the _method key within urlencoded bodies
+app.use(bodyParser.urlencoded())
+app.use(methodOverride('_method'))
+```
+
+### override using a header
+
+```js
+var connect        = require('connect')
+var methodOverride = require('method-override')
+
+// override with the X-HTTP-Method-Override header in the request
+app.use(methodOverride('X-HTTP-Method-Override'))
+```
+
+### multiple format support
+
+```js
+var connect        = require('connect')
+var methodOverride = require('method-override')
+
+// override with different headers; last one takes precedence
+app.use(methodOverride('X-HTTP-Method'))          // Microsoft
+app.use(methodOverride('X-HTTP-Method-Override')) // Google/GData
+app.use(methodOverride('X-Method-Override'))      // IBM
+```
+
+### custom logic
+
+```js
+var connect        = require('connect')
+var methodOverride = require('method-override')
+
+app.use(methodOverride(function(req){
+  if (req.user) {
+    // only logged-in users can override methods
+    return req.headers['x-http-method-override']
+  }
+}))
 ```
 
 ## License

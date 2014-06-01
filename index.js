@@ -16,48 +16,88 @@ var methods = require('methods');
  *
  * Provides faux HTTP method support.
  *
- * Pass an optional `key` to use when checking for
- * a method override, otherwise defaults to _\_method_.
+ * Pass an optional `getter` to use when checking for
+ * a method override.
+ *
+ * A string is converted to a getter that will look for
+ * the method in `req.body[getter]` and a function will be
+ * called with `req` and expects the method to be returned.
+ * If the string starts with `X-` then it will look in
+ * `req.headers[getter]` instead.
+ *
  * The original method is available via `req.originalMethod`.
  *
- * @param {String} key
- * @return {Function}
+ * @param {string|function} [getter=_method]
+ * @return {function}
  * @api public
  */
 
-module.exports = function methodOverride(key){
-  key = key || '_method';
+module.exports = function methodOverride(getter){
+  var get = typeof getter === 'function'
+    ? getter
+    : createGetter(getter || '_method')
+
   return function methodOverride(req, res, next) {
     var method
-    var val
 
-    req.originalMethod = req.originalMethod || req.method;
+    req.originalMethod = req.originalMethod || req.method
+    method = get(req)
 
-    // req.body
+    // replace
+    if (method !== undefined && supports(method)) {
+      req.method = method.toUpperCase()
+    }
+
+    next()
+  }
+}
+
+/**
+ * Create a getter for the given string.
+ */
+
+function createGetter(str) {
+  if (str.substr(0, 2).toUpperCase() === 'X-') {
+    // header getter
+    return createHeaderGetter(str)
+  }
+
+  return createBodyGetter(str)
+}
+
+/**
+ * Create a getter for the given body key name.
+ */
+
+function createBodyGetter(key) {
+  return function(req) {
+    var method
+
     if (req.body && typeof req.body === 'object' && key in req.body) {
       method = req.body[key]
       delete req.body[key]
     }
 
-    // check X-HTTP-Method-Override
-    val = req.headers['x-http-method-override']
-    if (val) {
-      // multiple headers get joined with comma by node.js core
-      method = val.split(/ *, */)
-    }
+    // return first value, for rich body types
+    return Array.isArray(method)
+      ? method[0]
+      : method
+  }
+}
 
-    if (Array.isArray(method)) {
-      method = method[0]
-    }
+/**
+ * Create a getter for the given header name.
+ */
 
-    // replace
-    if (supports(method)) {
-      req.method = method.toUpperCase()
-    }
+function createHeaderGetter(str) {
+  var header = str.toLowerCase()
 
-    next();
-  };
-};
+  return function(req) {
+    // multiple headers get joined with comma by node.js core
+    // return first value
+    return (req.headers[header] || '').split(/ *, */)[0]
+  }
+}
 
 /**
  * Check if node supports `method`.
