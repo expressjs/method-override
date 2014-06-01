@@ -10,6 +10,8 @@
  */
 
 var methods = require('methods');
+var parseurl = require('parseurl');
+var querystring = require('querystring');
 
 /**
  * Method Override:
@@ -48,6 +50,7 @@ module.exports = function methodOverride(getter, options){
 
   return function methodOverride(req, res, next) {
     var method
+    var val
 
     req.originalMethod = req.originalMethod || req.method
 
@@ -56,7 +59,10 @@ module.exports = function methodOverride(getter, options){
       return next()
     }
 
-    method = get(req)
+    val = get(req)
+    method = Array.isArray(val)
+      ? val[0]
+      : val
 
     // replace
     if (method !== undefined && supports(method)) {
@@ -77,26 +83,18 @@ function createGetter(str) {
     return createHeaderGetter(str)
   }
 
-  return createBodyGetter(str)
+  return createQueryGetter(str)
 }
 
 /**
- * Create a getter for the given body key name.
+ * Create a getter for the given query key name.
  */
 
-function createBodyGetter(key) {
+function createQueryGetter(key) {
   return function(req) {
-    var method
-
-    if (req.body && typeof req.body === 'object' && key in req.body) {
-      method = req.body[key]
-      delete req.body[key]
-    }
-
-    // return first value, for rich body types
-    return Array.isArray(method)
-      ? method[0]
-      : method
+    var url = parseurl(req)
+    var query = querystring.parse(url.query || '')
+    return query[key]
   }
 }
 
@@ -109,8 +107,7 @@ function createHeaderGetter(str) {
 
   return function(req) {
     // multiple headers get joined with comma by node.js core
-    // return first value
-    return (req.headers[header] || '').split(/ *, */)[0]
+    return (req.headers[header] || '').split(/ *, */)
   }
 }
 

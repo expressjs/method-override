@@ -24,7 +24,8 @@
     "url": "https://github.com/expressjs/method-override/issues"
   },
   "dependencies": {
-    "methods": "1.0.0"
+    "methods": "1.0.0",
+    "parseurl": "1.0.1"
   },
   "devDependencies": {
     "istanbul": "0.2.10",

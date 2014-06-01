@@ -19,8 +19,8 @@ describe('methodOverride(getter)', function(){
     .expect('X-Got-Method', 'DELETE', done)
   })
 
-  describe('with body', function(){
-    it('should work missing body', function(done){
+  describe('with query', function(){
+    it('should work missing query', function(done){
       var server = createServer('_method')
 
       request(server)
@@ -30,76 +30,39 @@ describe('methodOverride(getter)', function(){
     })
 
     it('should be case in-sensitive', function(done){
-      var server = createServer('_method', null, {
-        _method: 'DELete'
-      })
+      var server = createServer('_method')
 
       request(server)
-      .post('/')
+      .post('/?_method=DELete')
       .set('Content-Type', 'application/json')
       .expect('X-Got-Method', 'DELETE', done)
     })
 
     it('should ignore invalid methods', function(done){
-      var server = createServer('_method', null, {
-        _method: 'BOGUS'
-      })
+      var server = createServer('_method')
 
       request(server)
-      .post('/')
+      .post('/?_method=BOGUS')
       .set('Content-Type', 'application/json')
       .expect('X-Got-Method', 'POST', done)
     })
 
-    it('should remove key from req.body', function(done){
-      var server = createServer('_method', null, {
-        foo: 'bar',
-        _method: 'DELETE'
-      })
-
-      request(server)
-      .post('/')
-      .set('Content-Type', 'application/json')
-      .expect('X-Got-Method', 'DELETE')
-      .expect(200, '{"foo":"bar"}', done)
-    })
-
     it('should handle key referencing array', function(done){
-      var server = createServer('_method', null, {
-        foo: 'bar',
-        _method: ['DELETE', 'PUT']
-      })
+      var server = createServer('_method')
 
-      request(server)
-      .post('/')
-      .set('Content-Type', 'application/json')
-      .expect('X-Got-Method', 'DELETE')
-      .expect(200, '{"foo":"bar"}', done)
-    })
-
-    it('should handle key referencing object', function(done){
-      var server = createServer('_method', null, {
-        foo: 'bar',
-        _method: {}
-      })
-
-      request(server)
-      .post('/')
-      .set('Content-Type', 'application/json')
-      .expect('X-Got-Method', 'POST')
-      .expect(200, '{"foo":"bar"}', done)
+      var test = request(server).post('/')
+      test.request().path += '?_method=DELETE&_method=PUT' // supertest mangles query params
+      test.set('Content-Type', 'application/json')
+      test.expect('X-Got-Method', 'DELETE', done)
     })
 
     it('should only work with POST', function(done){
-      var server = createServer('_method', null, {
-        _method: 'PATCH'
-      })
+      var server = createServer('_method')
 
       request(server)
-      .delete('/')
+      .delete('/?_method=PATCH')
       .set('Content-Type', 'application/json')
-      .expect('X-Got-Method', 'DELETE')
-      .expect(200, done)
+      .expect('X-Got-Method', 'DELETE', done)
     })
   })
 
@@ -202,10 +165,9 @@ describe('methodOverride(getter)', function(){
   })
 })
 
-function createServer(getter, opts, _body) {
+function createServer(getter, opts) {
   var _override = methodOverride(getter, opts)
   return http.createServer(function (req, res) {
-    req.body = _body
     _override(req, res, function (err) {
       res.statusCode = err ? 500 : 200
       res.setHeader('X-Got-Method', req.method)

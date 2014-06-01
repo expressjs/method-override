@@ -39,8 +39,7 @@ string is provided, the string is used to look up the method with the following 
 - If the string starts with `X-`, then it is treated as the name of a header and that header
   is used for the method override. If the request contains the same header multiple times, the
   first occurrence is used.
-- All other strings are treated as a property in `req.body`. If the property exists in `req.body`,
-  it is read and the entry is deleted from `req.body` for seamless method overrides in the body.
+- All other strings are treated as a key in the URL query string.
 
 #### options.methods
 
@@ -62,15 +61,13 @@ var methodOverride = require('method-override')
 app.use(methodOverride('X-HTTP-Method-Override'))
 ```
 
-### override in POST bodies
+### override using a query value
 
 ```js
-var bodyParser     = require('body-parser')
 var connect        = require('connect')
 var methodOverride = require('method-override')
 
-// override with the _method key within urlencoded bodies
-app.use(bodyParser.urlencoded())
+// override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
 ```
 
@@ -88,14 +85,21 @@ app.use(methodOverride('X-Method-Override'))      // IBM
 
 ### custom logic
 
+You can implement any kind of custom logic with a function for the `getter`. The following
+implements the logic for looking in `req.body` that was in `method-override` 1:
+
 ```js
+var bodyParser     = require('body-parser')
 var connect        = require('connect')
 var methodOverride = require('method-override')
 
+app.use(bodyParser.urlencoded())
 app.use(methodOverride(function(req){
-  if (req.user) {
-    // only logged-in users can override methods
-    return req.headers['x-http-method-override']
+  if (req.body && typeof req.body === 'object' && '_method' in req.body) {
+    // look in urlencoded POST bodies and delete it
+    var method = req.body._method
+    delete req.body._method
+    return method
   }
 }))
 ```

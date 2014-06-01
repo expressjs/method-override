@@ -6,6 +6,8 @@ unreleased
     - Can specify what header to look for override in, if wanted
     - Can specify custom function to get method from request
   * Only `POST` requests are examined by default
+  * Remove `req.body` support for more standard query param support
+    - Use custom `getter` function if `req.body` support is needed
 
 1.0.2 / 2014-05-22
 ==================
