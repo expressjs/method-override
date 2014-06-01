@@ -59,7 +59,7 @@ module.exports = function methodOverride(getter, options){
       return next()
     }
 
-    val = get(req)
+    val = get(req, res)
     method = Array.isArray(val)
       ? val[0]
       : val
@@ -91,7 +91,7 @@ function createGetter(str) {
  */
 
 function createQueryGetter(key) {
-  return function(req) {
+  return function(req, res) {
     var url = parseurl(req)
     var query = querystring.parse(url.query || '')
     return query[key]
@@ -105,7 +105,10 @@ function createQueryGetter(key) {
 function createHeaderGetter(str) {
   var header = str.toLowerCase()
 
-  return function(req) {
+  return function(req, res) {
+    // set appropriate Vary header
+    vary(res, str)
+
     // multiple headers get joined with comma by node.js core
     return (req.headers[header] || '').split(/ *, */)
   }
@@ -119,4 +122,30 @@ function supports(method) {
   return method
     && typeof method === 'string'
     && methods.indexOf(method.toLowerCase()) !== -1
+}
+
+/**
+ * Add val to Vary header
+ */
+
+function vary(res, val) {
+  var header = res.getHeader('Vary') || ''
+  var headers = Array.isArray(header)
+    ? header.join(', ')
+    : header
+
+  // enumerate current values
+  var vals = headers.toLowerCase().split(/ *, */)
+
+  if (vals.indexOf(val.toLowerCase()) !== -1) {
+    // already set
+    return
+  }
+
+  // append value (in existing format)
+  header = headers
+    ? headers + ', ' + val
+    : val
+
+  res.setHeader('Vary', header)
 }

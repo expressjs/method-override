@@ -102,6 +102,47 @@ describe('methodOverride(getter)', function(){
       .set('X-HTTP-Method-Override', 'DELETE, PUT')
       .expect('X-Got-Method', 'DELETE', done)
     })
+
+    it('should set Vary header', function(done){
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .set('X-HTTP-Method-Override', 'DELETE')
+      .expect('Vary', 'X-HTTP-Method-Override')
+      .expect('X-Got-Method', 'DELETE', done)
+    })
+
+    it('should set Vary header even with no override', function(done){
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .expect('Vary', 'X-HTTP-Method-Override')
+      .expect('X-Got-Method', 'POST', done)
+    })
+
+    it('should set Vary header when header is array', function(done){
+      var server = createServer('X-HTTP-Method-Override', null, function(req, res){
+        res.setHeader('Vary', ['User-Agent', 'Accept-Encoding'])
+      })
+
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .expect('Vary', 'User-Agent, Accept-Encoding, X-HTTP-Method-Override')
+      .expect('X-Got-Method', 'POST', done)
+    })
+
+    it('should not double-set Vary header', function(done){
+      var server = createServer('X-HTTP-Method-Override', null, function(req, res){
+        res.setHeader('Vary', 'X-HTTP-Method-Override')
+      })
+
+      request(server)
+      .post('/')
+      .set('Content-Type', 'application/json')
+      .expect('Vary', 'X-HTTP-Method-Override')
+      .expect('X-Got-Method', 'POST', done)
+    })
   })
 
   describe('with function', function(){
@@ -165,9 +206,10 @@ describe('methodOverride(getter)', function(){
   })
 })
 
-function createServer(getter, opts) {
+function createServer(getter, opts, fn) {
   var _override = methodOverride(getter, opts)
   return http.createServer(function (req, res) {
+    fn && fn(req, res)
     _override(req, res, function (err) {
       res.statusCode = err ? 500 : 200
       res.setHeader('X-Got-Method', req.method)

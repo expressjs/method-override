@@ -33,8 +33,9 @@ value will be stored in `req.originalMethod`.
 #### getter
 
 This is the method of getting the override value from the request. If a function is provided,
-the `req` is passed as the first argument and the method is expected to be returned. If a
-string is provided, the string is used to look up the method with the following rules:
+the `req` is passed as the first argument, the `res as the second argument and the method is
+expected to be returned. If a string is provided, the string is used to look up the method
+with the following rules:
 
 - If the string starts with `X-`, then it is treated as the name of a header and that header
   is used for the method override. If the request contains the same header multiple times, the
@@ -94,7 +95,7 @@ var connect        = require('connect')
 var methodOverride = require('method-override')
 
 app.use(bodyParser.urlencoded())
-app.use(methodOverride(function(req){
+app.use(methodOverride(function(req, res){
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
     // look in urlencoded POST bodies and delete it
     var method = req.body._method

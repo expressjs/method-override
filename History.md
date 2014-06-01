@@ -8,6 +8,7 @@ unreleased
   * Only `POST` requests are examined by default
   * Remove `req.body` support for more standard query param support
     - Use custom `getter` function if `req.body` support is needed
+  * Set `Vary` header when using built-in header checking
 
 1.0.2 / 2014-05-22
 ==================
