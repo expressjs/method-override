@@ -4,6 +4,7 @@ unreleased
   * New interface, less magic
     - Can specify what header to look for override in, if wanted
     - Can specify custom function to get method from request
+  * Only `POST` requests are examined by default
 
 1.0.2 / 2014-05-22
 ==================

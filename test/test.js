@@ -22,7 +22,7 @@ describe('methodOverride(getter)', function(){
     })
 
     it('should be case in-sensitive', function(done){
-      var server = createServer('_method', {
+      var server = createServer('_method', null, {
         _method: 'DELete'
       })
 
@@ -33,7 +33,7 @@ describe('methodOverride(getter)', function(){
     })
 
     it('should ignore invalid methods', function(done){
-      var server = createServer('_method', {
+      var server = createServer('_method', null, {
         _method: 'BOGUS'
       })
 
@@ -44,7 +44,7 @@ describe('methodOverride(getter)', function(){
     })
 
     it('should remove key from req.body', function(done){
-      var server = createServer('_method', {
+      var server = createServer('_method', null, {
         foo: 'bar',
         _method: 'DELETE'
       })
@@ -57,7 +57,7 @@ describe('methodOverride(getter)', function(){
     })
 
     it('should handle key referencing array', function(done){
-      var server = createServer('_method', {
+      var server = createServer('_method', null, {
         foo: 'bar',
         _method: ['DELETE', 'PUT']
       })
@@ -70,7 +70,7 @@ describe('methodOverride(getter)', function(){
     })
 
     it('should handle key referencing object', function(done){
-      var server = createServer('_method', {
+      var server = createServer('_method', null, {
         foo: 'bar',
         _method: {}
       })
@@ -80,6 +80,18 @@ describe('methodOverride(getter)', function(){
       .set('Content-Type', 'application/json')
       .expect('X-Got-Method', 'POST')
       .expect(200, '{"foo":"bar"}', done)
+    })
+
+    it('should only work with POST', function(done){
+      var server = createServer('_method', null, {
+        _method: 'PATCH'
+      })
+
+      request(server)
+      .delete('/')
+      .set('Content-Type', 'application/json')
+      .expect('X-Got-Method', 'DELETE')
+      .expect(200, done)
     })
   })
 
@@ -152,10 +164,38 @@ describe('methodOverride(getter)', function(){
       .expect('X-Got-Method', 'POST', done)
     })
   })
+
+  describe('given "options.methods"', function(){
+    it('should allow other methods', function(done){
+      var server = createServer('X-HTTP-Method-Override', { methods: ['POST', 'PATCH'] })
+      request(server)
+      .patch('/')
+      .set('Content-Type', 'application/json')
+      .set('X-HTTP-Method-Override', 'DELETE')
+      .expect('X-Got-Method', 'DELETE', done)
+    })
+
+    it('should allow all methods', function(done){
+      var server = createServer('X-HTTP-Method-Override', { methods: null })
+      request(server)
+      .patch('/')
+      .set('Content-Type', 'application/json')
+      .set('X-HTTP-Method-Override', 'DELETE')
+      .expect('X-Got-Method', 'DELETE', done)
+    })
+
+    it('should not call getter when method not allowed', function(done){
+      var server = createServer(function(req){ return 'DELETE' })
+      request(server)
+      .patch('/')
+      .set('Content-Type', 'application/json')
+      .expect('X-Got-Method', 'PATCH', done)
+    })
+  })
 })
 
-function createServer(key, _body) {
-  var _override = methodOverride(key)
+function createServer(getter, opts, _body) {
+  var _override = methodOverride(getter, opts)
   return http.createServer(function (req, res) {
     req.body = _body
     _override(req, res, function (err) {

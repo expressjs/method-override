@@ -18,12 +18,13 @@ $ npm install method-override
 needs to know the method of the request (for example, it _must_ be used prior to
 the `csurf` module).
 
-### methodOverride(getter)
+### methodOverride(getter, options)
 
 Create a new middleware function to override the `req.method` property with a new
 value. This value will be pulled from the provided `getter`.
 
 - `getter` - The getter to use to look up the overridden request method for the request. (default: `_method`)
+- `options.methods` - The allowed methods the original request must be in to check for a method override value. (default: `['POST']`)
 
 If the found method is supported by node.js core, then `req.method` will be set to
 this value, as if it has originally been that value. The previous `req.method`
@@ -40,6 +41,14 @@ string is provided, the string is used to look up the method with the following 
   first occurrence is used.
 - All other strings are treated as a property in `req.body`. If the property exists in `req.body`,
   it is read and the entry is deleted from `req.body` for seamless method overrides in the body.
+
+#### options.methods
+
+This allows the specification of what methods(s) the request *MUST* be in in order to check for
+the method override value. This defaults to only `POST` methods, which is the only method the
+override should arrive in. More methods may be specified here, but it may introduce security
+issues and cause weird behavior when requests travel through caches. This value is an array
+of methods in upper-case. `null` can be specified to allow all methods.
 
 ## Examples
 

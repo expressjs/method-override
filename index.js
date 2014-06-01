@@ -28,19 +28,34 @@ var methods = require('methods');
  * The original method is available via `req.originalMethod`.
  *
  * @param {string|function} [getter=_method]
+ * @param {object} [options]
  * @return {function}
  * @api public
  */
 
-module.exports = function methodOverride(getter){
+module.exports = function methodOverride(getter, options){
+  options = options || {}
+
+  // get the getter fn
   var get = typeof getter === 'function'
     ? getter
     : createGetter(getter || '_method')
+
+  // get allowed request methods to examine
+  var methods = options.methods === undefined
+    ? ['POST']
+    : options.methods
 
   return function methodOverride(req, res, next) {
     var method
 
     req.originalMethod = req.originalMethod || req.method
+
+    // validate request is on allowed method
+    if (methods && methods.indexOf(req.originalMethod) === -1) {
+      return next()
+    }
+
     method = get(req)
 
     // replace
