@@ -2,6 +2,7 @@
 
 [![NPM version](https://badge.fury.io/js/method-override.svg)](http://badge.fury.io/js/method-override)
 [![Build Status](https://travis-ci.org/expressjs/method-override.svg?branch=master)](https://travis-ci.org/expressjs/method-override)
+[![Coverage Status](https://img.shields.io/coveralls/expressjs/method-override.svg?branch=master)](https://coveralls.io/r/expressjs/method-override)
 
 Lets you use HTTP verbs such as PUT or DELETE in places you normally can't.
 
