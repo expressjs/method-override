@@ -1,6 +1,7 @@
 unreleased
 ==========
 
+  * Default behavior only checks `X-HTTP-Method-Override` header
   * New interface, less magic
     - Can specify what header to look for override in, if wanted
     - Can specify custom function to get method from request

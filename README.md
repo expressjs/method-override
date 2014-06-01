@@ -23,7 +23,7 @@ the `csurf` module).
 Create a new middleware function to override the `req.method` property with a new
 value. This value will be pulled from the provided `getter`.
 
-- `getter` - The getter to use to look up the overridden request method for the request. (default: `_method`)
+- `getter` - The getter to use to look up the overridden request method for the request. (default: `X-HTTP-Method-Override`)
 - `options.methods` - The allowed methods the original request must be in to check for a method override value. (default: `['POST']`)
 
 If the found method is supported by node.js core, then `req.method` will be set to
@@ -52,6 +52,16 @@ of methods in upper-case. `null` can be specified to allow all methods.
 
 ## Examples
 
+### override using a header
+
+```js
+var connect        = require('connect')
+var methodOverride = require('method-override')
+
+// override with the X-HTTP-Method-Override header in the request
+app.use(methodOverride('X-HTTP-Method-Override'))
+```
+
 ### override in POST bodies
 
 ```js
@@ -62,16 +72,6 @@ var methodOverride = require('method-override')
 // override with the _method key within urlencoded bodies
 app.use(bodyParser.urlencoded())
 app.use(methodOverride('_method'))
-```
-
-### override using a header
-
-```js
-var connect        = require('connect')
-var methodOverride = require('method-override')
-
-// override with the X-HTTP-Method-Override header in the request
-app.use(methodOverride('X-HTTP-Method-Override'))
 ```
 
 ### multiple format support

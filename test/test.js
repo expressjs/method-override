@@ -11,6 +11,14 @@ describe('methodOverride(getter)', function(){
     .expect('X-Got-Method', 'GET', done)
   })
 
+  it('should use X-HTTP-Method-Override by default', function(done){
+    var server = createServer()
+    request(server)
+    .post('/')
+    .set('X-HTTP-Method-Override', 'DELETE')
+    .expect('X-Got-Method', 'DELETE', done)
+  })
+
   describe('with body', function(){
     it('should work missing body', function(done){
       var server = createServer('_method')

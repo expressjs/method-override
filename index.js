@@ -27,7 +27,7 @@ var methods = require('methods');
  *
  * The original method is available via `req.originalMethod`.
  *
- * @param {string|function} [getter=_method]
+ * @param {string|function} [getter=X-HTTP-Method-Override]
  * @param {object} [options]
  * @return {function}
  * @api public
@@ -39,7 +39,7 @@ module.exports = function methodOverride(getter, options){
   // get the getter fn
   var get = typeof getter === 'function'
     ? getter
-    : createGetter(getter || '_method')
+    : createGetter(getter || 'X-HTTP-Method-Override')
 
   // get allowed request methods to examine
   var methods = options.methods === undefined
