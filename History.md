@@ -1,5 +1,5 @@
-unreleased
-==========
+2.0.0 / 2014-06-01
+==================
 
   * Default behavior only checks `X-HTTP-Method-Override` header
   * New interface, less magic
