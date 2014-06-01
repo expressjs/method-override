@@ -28,8 +28,8 @@
   },
   "devDependencies": {
     "istanbul": "0.2.10",
-    "mocha": "~1.19.0",
-    "supertest": "~0.12.1"
+    "mocha": "~1.20.0",
+    "supertest": "~0.13.0"
   },
   "engines": {
     "node": ">= 0.8.0"
