@@ -1,5 +1,5 @@
-unreleased
-==========
+2.0.2 / 2014-06-05
+==================
 
   * use vary module for better `Vary` behavior
 
