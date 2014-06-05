@@ -1,3 +1,8 @@
+unreleased
+==========
+
+  * use vary module for better `Vary` behavior
+
 2.0.1 / 2014-06-02
 ==================
 

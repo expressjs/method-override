@@ -13,6 +13,7 @@
 var methods = require('methods');
 var parseurl = require('parseurl');
 var querystring = require('querystring');
+var vary = require('vary');
 
 /**
  * Method Override:
@@ -123,30 +124,4 @@ function supports(method) {
   return method
     && typeof method === 'string'
     && methods.indexOf(method.toLowerCase()) !== -1
-}
-
-/**
- * Add val to Vary header
- */
-
-function vary(res, val) {
-  var header = res.getHeader('Vary') || ''
-  var headers = Array.isArray(header)
-    ? header.join(', ')
-    : header
-
-  // enumerate current values
-  var vals = headers.toLowerCase().split(/ *, */)
-
-  if (vals.indexOf(val.toLowerCase()) !== -1) {
-    // already set
-    return
-  }
-
-  // append value (in existing format)
-  header = headers
-    ? headers + ', ' + val
-    : val
-
-  res.setHeader('Vary', header)
 }

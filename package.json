@@ -25,7 +25,8 @@
   },
   "dependencies": {
     "methods": "1.0.1",
-    "parseurl": "1.0.1"
+    "parseurl": "1.0.1",
+    "vary": "0.1.0"
   },
   "devDependencies": {
     "istanbul": "0.2.10",
