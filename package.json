@@ -15,14 +15,7 @@
     }
   ],
   "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/expressjs/method-override.git"
-  },
-  "bugs": {
-    "mail": "me@jongleberry.com",
-    "url": "https://github.com/expressjs/method-override/issues"
-  },
+  "repository": "expressjs/method-override",
   "dependencies": {
     "methods": "1.0.1",
     "parseurl": "1.0.1",
