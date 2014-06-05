@@ -54,6 +54,11 @@ of methods in upper-case. `null` can be specified to allow all methods.
 
 ### override using a header
 
+To use a header to override the method, specify the header name
+as a string argument to the `methodOverride` function. To then make
+the call, send  a `POST` request to a URL with the overridden method
+as the value of that header.
+
 ```js
 var connect        = require('connect')
 var methodOverride = require('method-override')
@@ -62,7 +67,23 @@ var methodOverride = require('method-override')
 app.use(methodOverride('X-HTTP-Method-Override'))
 ```
 
+Example call with header override using `curl`:
+
+```
+curl -XPOST -H'X-HTTP-Method-Override: DELETE' --verbose http://localhost:3000/resource
+> POST /resource HTTP/1.1
+> Host: localhost:3000
+> X-HTTP-Method-Override: DELETE
+>
+Cannot DELETE /resource
+```
+
 ### override using a query value
+
+To use a query string value to override the method, specify the query
+string key as a string argument to the `methodOverride` function. To
+then make the call, send  a `POST` request to a URL with the overridden
+method as the value of that query string key.
 
 ```js
 var connect        = require('connect')
@@ -70,6 +91,16 @@ var methodOverride = require('method-override')
 
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
+```
+
+Example call with query override using `curl`:
+
+```
+curl -XPOST --verbose http://localhost:3000/resource?_method=DELETE
+> POST /resource?_method=DELETE HTTP/1.1
+> Host: localhost:3000
+>
+Cannot DELETE /resource?_method=DELETE
 ```
 
 ### multiple format support
