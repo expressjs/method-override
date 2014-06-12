@@ -57,7 +57,9 @@ of methods in upper-case. `null` can be specified to allow all methods.
 To use a header to override the method, specify the header name
 as a string argument to the `methodOverride` function. To then make
 the call, send  a `POST` request to a URL with the overridden method
-as the value of that header.
+as the value of that header. This method of using a header would
+typically be used in conjunction with `XMLHttpRequest` on implementations
+that do not support the method you are trying to use.
 
 ```js
 var connect        = require('connect')
@@ -67,15 +69,18 @@ var methodOverride = require('method-override')
 app.use(methodOverride('X-HTTP-Method-Override'))
 ```
 
-Example call with header override using `curl`:
+Example call with header override using `XMLHttpRequest`:
 
-```
-curl -XPOST -H'X-HTTP-Method-Override: DELETE' --verbose http://localhost:3000/resource
-> POST /resource HTTP/1.1
-> Host: localhost:3000
-> X-HTTP-Method-Override: DELETE
->
-Cannot DELETE /resource
+```js
+var xhr = new XMLHttpRequest()
+xhr.onload = onload
+xhr.open('post', '/resource', true)
+xhr.setRequestHeader('X-HTTP-Method-Override', 'DELETE')
+xhr.send()
+
+function onload() {
+  alert('got response: ' + this.responseText)
+}
 ```
 
 ### override using a query value
@@ -83,7 +88,10 @@ Cannot DELETE /resource
 To use a query string value to override the method, specify the query
 string key as a string argument to the `methodOverride` function. To
 then make the call, send  a `POST` request to a URL with the overridden
-method as the value of that query string key.
+method as the value of that query string key. This method of using a
+query value would typically be used in conjunction with plain HTML
+`<form>` elements when trying to support legacy browsers but still use
+newer methods.
 
 ```js
 var connect        = require('connect')
@@ -93,14 +101,12 @@ var methodOverride = require('method-override')
 app.use(methodOverride('_method'))
 ```
 
-Example call with query override using `curl`:
+Example call with query override using HTML `<form>`:
 
-```
-curl -XPOST --verbose http://localhost:3000/resource?_method=DELETE
-> POST /resource?_method=DELETE HTTP/1.1
-> Host: localhost:3000
->
-Cannot DELETE /resource?_method=DELETE
+```html
+<form method="POST" action="/resource?_method=DELETE">
+  <button type="submit">Delete resource</button>
+</form>
 ```
 
 ### multiple format support
@@ -118,13 +124,16 @@ app.use(methodOverride('X-Method-Override'))      // IBM
 ### custom logic
 
 You can implement any kind of custom logic with a function for the `getter`. The following
-implements the logic for looking in `req.body` that was in `method-override` 1:
+implements the logic for looking in `req.body` that was in `method-override@1`:
 
 ```js
 var bodyParser     = require('body-parser')
 var connect        = require('connect')
 var methodOverride = require('method-override')
 
+// NOTE: when using req.body, you must fully parse the request body
+//       before you call methodOverride() in your middleware stack,
+//       otherwise req.body will not be populated.
 app.use(bodyParser.urlencoded())
 app.use(methodOverride(function(req, res){
   if (req.body && typeof req.body === 'object' && '_method' in req.body) {
@@ -134,6 +143,16 @@ app.use(methodOverride(function(req, res){
     return method
   }
 }))
+```
+
+Example call with query override using HTML `<form>`:
+
+```html
+<!-- enctype must be set to the type you will parse before methodOverride() -->
+<form method="POST" action="/resource" enctype="application/x-www-form-urlencoded">
+  <input type="hidden" name="_method" value="DELETE">
+  <button type="submit">Delete resource</button>
+</form>
 ```
 
 ## License
