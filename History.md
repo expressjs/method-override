@@ -1,5 +1,5 @@
-unreleased
-==========
+2.1.0 / 2014-07-08
+==================
 
   * add simple debug output
   * deps: methods@1.1.0
