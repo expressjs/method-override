@@ -3,6 +3,8 @@ unreleased
 
   * deps: methods@1.1.0
     - add `CONNECT`
+  * deps: parseurl@~1.1.3
+    - faster parsing of href-only URLs
 
 2.0.2 / 2014-06-05
 ==================
