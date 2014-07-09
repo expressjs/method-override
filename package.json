@@ -9,7 +9,7 @@
   "license": "MIT",
   "repository": "expressjs/method-override",
   "dependencies": {
-    "methods": "1.0.1",
+    "methods": "1.1.0",
     "parseurl": "1.0.1",
     "vary": "0.1.0"
   },
