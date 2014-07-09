@@ -11,6 +11,7 @@
  * Module dependencies.
  */
 
+var debug = require('debug')('method-override')
 var methods = require('methods');
 var parseurl = require('parseurl');
 var querystring = require('querystring');
@@ -57,7 +58,7 @@ module.exports = function methodOverride(getter, options){
 
     req.originalMethod = req.originalMethod || req.method
 
-    // validate request is on allowed method
+    // validate request is an allowed method
     if (methods && methods.indexOf(req.originalMethod) === -1) {
       return next()
     }
@@ -70,6 +71,7 @@ module.exports = function methodOverride(getter, options){
     // replace
     if (method !== undefined && supports(method)) {
       req.method = method.toUpperCase()
+      debug('override %s as %s', req.originalMethod, req.method)
     }
 
     next()

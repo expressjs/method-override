@@ -1,6 +1,7 @@
 unreleased
 ==========
 
+  * add simple debug output
   * deps: methods@1.1.0
     - add `CONNECT`
   * deps: parseurl@~1.1.3
