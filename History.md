@@ -2,6 +2,10 @@ unreleased
 ==========
 
   * deps: debug@1.0.4
+  * deps: parseurl@~1.2.0
+    - Cache URLs based on original value
+    - Remove no-longer-needed URL mis-parse work-around
+    - Simplify the "fast-path" `RegExp`
 
 2.1.1 / 2014-07-11
 ==================
