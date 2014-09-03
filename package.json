@@ -19,6 +19,11 @@
     "mocha": "~1.21.4",
     "supertest": "~0.13.0"
   },
+  "files": [
+    "LICENSE",
+    "HISTORY.md",
+    "index.js"
+  ],
   "engines": {
     "node": ">= 0.8.0"
   },
