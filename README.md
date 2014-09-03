@@ -4,6 +4,7 @@
 [![NPM Downloads][downloads-image]][downloads-url]
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
+[![Gratipay][gratipay-image]][gratipay-url]
 
 Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
 
@@ -168,3 +169,5 @@ Example call with query override using HTML `<form>`:
 [coveralls-url]: https://coveralls.io/r/expressjs/method-override?branch=master
 [downloads-image]: http://img.shields.io/npm/dm/method-override.svg?style=flat
 [downloads-url]: https://npmjs.org/package/method-override
+[gratipay-image]: https://img.shields.io/gratipay/dougwilson.svg?style=flat
+[gratipay-url]: https://www.gratipay.com/dougwilson/
