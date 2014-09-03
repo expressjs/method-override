@@ -1,8 +1,9 @@
 # method-override
 
-[![NPM version](https://badge.fury.io/js/method-override.svg)](http://badge.fury.io/js/method-override)
-[![Build Status](https://travis-ci.org/expressjs/method-override.svg?branch=master)](https://travis-ci.org/expressjs/method-override)
-[![Coverage Status](https://img.shields.io/coveralls/expressjs/method-override.svg?branch=master)](https://coveralls.io/r/expressjs/method-override)
+[![NPM Version][npm-image]][npm-url]
+[![NPM Downloads][downloads-image]][downloads-url]
+[![Build Status][travis-image]][travis-url]
+[![Test Coverage][coveralls-image]][coveralls-url]
 
 Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
 
@@ -158,3 +159,12 @@ Example call with query override using HTML `<form>`:
 ## License
 
 [MIT](LICENSE)
+
+[npm-image]: https://img.shields.io/npm/v/method-override.svg?style=flat
+[npm-url]: https://npmjs.org/package/method-override
+[travis-image]: https://img.shields.io/travis/expressjs/method-override.svg?style=flat
+[travis-url]: https://travis-ci.org/expressjs/method-override
+[coveralls-image]: https://img.shields.io/coveralls/expressjs/method-override.svg?style=flat
+[coveralls-url]: https://coveralls.io/r/expressjs/method-override?branch=master
+[downloads-image]: http://img.shields.io/npm/dm/method-override.svg?style=flat
+[downloads-url]: https://npmjs.org/package/method-override
