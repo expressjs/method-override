@@ -167,7 +167,7 @@ Example call with query override using HTML `<form>`:
 [travis-url]: https://travis-ci.org/expressjs/method-override
 [coveralls-image]: https://img.shields.io/coveralls/expressjs/method-override.svg?style=flat
 [coveralls-url]: https://coveralls.io/r/expressjs/method-override?branch=master
-[downloads-image]: http://img.shields.io/npm/dm/method-override.svg?style=flat
+[downloads-image]: https://img.shields.io/npm/dm/method-override.svg?style=flat
 [downloads-url]: https://npmjs.org/package/method-override
 [gratipay-image]: https://img.shields.io/gratipay/dougwilson.svg?style=flat
 [gratipay-url]: https://www.gratipay.com/dougwilson/
