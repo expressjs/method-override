@@ -10,7 +10,7 @@
   "repository": "expressjs/method-override",
   "dependencies": {
     "debug": "~2.1.1",
-    "methods": "1.1.0",
+    "methods": "~1.1.1",
     "parseurl": "~1.3.0",
     "vary": "~1.0.0"
   },
