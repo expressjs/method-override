@@ -35,7 +35,7 @@ value will be stored in `req.originalMethod`.
 #### getter
 
 This is the method of getting the override value from the request. If a function is provided,
-the `req` is passed as the first argument, the `res as the second argument and the method is
+the `req` is passed as the first argument, the `res` as the second argument and the method is
 expected to be returned. If a string is provided, the string is used to look up the method
 with the following rules:
 
