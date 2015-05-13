@@ -161,13 +161,13 @@ Example call with query override using HTML `<form>`:
 
 [MIT](LICENSE)
 
-[npm-image]: https://img.shields.io/npm/v/method-override.svg?style=flat
+[npm-image]: https://img.shields.io/npm/v/method-override.svg
 [npm-url]: https://npmjs.org/package/method-override
-[travis-image]: https://img.shields.io/travis/expressjs/method-override.svg?style=flat
+[travis-image]: https://img.shields.io/travis/expressjs/method-override/master.svg
 [travis-url]: https://travis-ci.org/expressjs/method-override
-[coveralls-image]: https://img.shields.io/coveralls/expressjs/method-override.svg?style=flat
+[coveralls-image]: https://img.shields.io/coveralls/expressjs/method-override/master.svg
 [coveralls-url]: https://coveralls.io/r/expressjs/method-override?branch=master
-[downloads-image]: https://img.shields.io/npm/dm/method-override.svg?style=flat
+[downloads-image]: https://img.shields.io/npm/dm/method-override.svg
 [downloads-url]: https://npmjs.org/package/method-override
-[gratipay-image]: https://img.shields.io/gratipay/dougwilson.svg?style=flat
+[gratipay-image]: https://img.shields.io/gratipay/dougwilson.svg
 [gratipay-url]: https://www.gratipay.com/dougwilson/
