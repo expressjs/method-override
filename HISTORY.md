@@ -1,3 +1,9 @@
+unreleased
+==========
+
+  * deps: methods@~1.1.2
+    - perf: enable strict mode
+
 2.3.5 / 2015-07-31
 ==================
 
