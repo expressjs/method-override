@@ -14,10 +14,10 @@
  */
 
 var debug = require('debug')('method-override')
-var methods = require('methods');
-var parseurl = require('parseurl');
-var querystring = require('querystring');
-var vary = require('vary');
+var methods = require('methods')
+var parseurl = require('parseurl')
+var querystring = require('querystring')
+var vary = require('vary')
 
 /**
  * Method Override:
@@ -41,7 +41,7 @@ var vary = require('vary');
  * @api public
  */
 
-module.exports = function methodOverride(getter, options){
+module.exports = function methodOverride (getter, options) {
   options = options || {}
 
   // get the getter fn
@@ -54,7 +54,7 @@ module.exports = function methodOverride(getter, options){
     ? ['POST']
     : options.methods
 
-  return function methodOverride(req, res, next) {
+  return function methodOverride (req, res, next) {
     var method
     var val
 
@@ -84,7 +84,7 @@ module.exports = function methodOverride(getter, options){
  * Create a getter for the given string.
  */
 
-function createGetter(str) {
+function createGetter (str) {
   if (str.substr(0, 2).toUpperCase() === 'X-') {
     // header getter
     return createHeaderGetter(str)
@@ -97,8 +97,8 @@ function createGetter(str) {
  * Create a getter for the given query key name.
  */
 
-function createQueryGetter(key) {
-  return function(req, res) {
+function createQueryGetter (key) {
+  return function (req, res) {
     var url = parseurl(req)
     var query = querystring.parse(url.query || '')
     return query[key]
@@ -109,10 +109,10 @@ function createQueryGetter(key) {
  * Create a getter for the given header name.
  */
 
-function createHeaderGetter(str) {
+function createHeaderGetter (str) {
   var header = str.toLowerCase()
 
-  return function(req, res) {
+  return function (req, res) {
     // set appropriate Vary header
     vary(res, str)
 
@@ -125,8 +125,8 @@ function createHeaderGetter(str) {
  * Check if node supports `method`.
  */
 
-function supports(method) {
-  return method
-    && typeof method === 'string'
-    && methods.indexOf(method.toLowerCase()) !== -1
+function supports (method) {
+  return method &&
+    typeof method === 'string' &&
+    methods.indexOf(method.toLowerCase()) !== -1
 }
