@@ -64,9 +64,9 @@ typically be used in conjunction with `XMLHttpRequest` on implementations
 that do not support the method you are trying to use.
 
 ```js
-var connect = require('connect')
+var express = require('express')
 var methodOverride = require('method-override')
-var app = connect()
+var app = express()
 
 // override with the X-HTTP-Method-Override header in the request
 app.use(methodOverride('X-HTTP-Method-Override'))
@@ -99,9 +99,9 @@ query value would typically be used in conjunction with plain HTML
 newer methods.
 
 ```js
-var connect = require('connect')
+var express = require('express')
 var methodOverride = require('method-override')
-var app = connect()
+var app = express()
 
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
@@ -118,9 +118,9 @@ Example call with query override using HTML `<form>`:
 ### multiple format support
 
 ```js
-var connect = require('connect')
+var express = require('express')
 var methodOverride = require('method-override')
-var app = connect()
+var app = express()
 
 // override with different headers; last one takes precedence
 app.use(methodOverride('X-HTTP-Method'))          // Microsoft
@@ -135,9 +135,9 @@ implements the logic for looking in `req.body` that was in `method-override@1`:
 
 ```js
 var bodyParser = require('body-parser')
-var connect = require('connect')
+var express = require('express')
 var methodOverride = require('method-override')
-var app = connect()
+var app = express()
 
 // NOTE: when using req.body, you must fully parse the request body
 //       before you call methodOverride() in your middleware stack,
