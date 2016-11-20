@@ -4,6 +4,7 @@ unreleased
   * deps: debug@2.3.3
     - Fix error when running under React Native
     - deps: ms@0.7.2
+  * perf: remove argument reassignment
 
 2.3.6 / 2016-05-20
 ==================
