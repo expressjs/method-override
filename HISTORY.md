@@ -1,5 +1,5 @@
-unreleased
-==========
+2.3.7 / 2016-11-19
+==================
 
   * deps: debug@2.3.3
     - Fix error when running under React Native
