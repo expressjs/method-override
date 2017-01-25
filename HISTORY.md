@@ -1,3 +1,11 @@
+unreleased
+==========
+
+  * deps: debug@2.6.0
+    - Allow colors in workers
+    - Deprecated `DEBUG_FD` environment variable
+    - Use same color for same namespace
+
 2.3.7 / 2016-11-19
 ==================
 
