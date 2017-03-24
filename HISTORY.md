@@ -1,9 +1,10 @@
 unreleased
 ==========
 
-  * deps: debug@2.6.0
+  * deps: debug@2.6.3
     - Allow colors in workers
     - Deprecated `DEBUG_FD` environment variable
+    - Fix: `DEBUG_MAX_ARRAY_LENGTH`
     - Use same color for same namespace
 
 2.3.7 / 2016-11-19
