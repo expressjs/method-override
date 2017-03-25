@@ -1,7 +1,7 @@
 {
   "name": "method-override",
   "description": "Override HTTP verbs",
-  "version": "2.3.7",
+  "version": "2.3.8",
   "contributors": [
     "Douglas Christopher Wilson <doug@somethingdoug.com>",
     "Jonathan Ong <me@jongleberry.com> (http://jongleberry.com)"

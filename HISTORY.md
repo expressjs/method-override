@@ -1,5 +1,5 @@
-unreleased
-==========
+2.3.8 / 2017-03-24
+==================
 
   * deps: debug@2.6.3
     - Allow colors in workers
