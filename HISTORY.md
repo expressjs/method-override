@@ -1,6 +1,8 @@
 unreleased
 ==========
 
+  * deps: debug@2.6.8
+    - deps: ms@2.0.0
   * deps: vary@~1.1.1
     - perf: hoist regular expression
 
