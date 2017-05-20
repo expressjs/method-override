@@ -1,3 +1,9 @@
+unreleased
+==========
+
+  * deps: vary@~1.1.1
+    - perf: hoist regular expression
+
 2.3.8 / 2017-03-24
 ==================
 
