@@ -7,6 +7,7 @@ unreleased
     - perf: unroll the "fast-path" `RegExp`
   * deps: vary@~1.1.2
     - perf: improve header token parsing speed
+  * perf: skip unnecessary parsing of entire header
 
 2.3.9 / 2017-05-19
 ==================
