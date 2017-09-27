@@ -5,6 +5,8 @@ unreleased
   * deps: parseurl@~1.3.2
     - perf: reduce overhead for full URLs
     - perf: unroll the "fast-path" `RegExp`
+  * deps: vary@~1.1.2
+    - perf: improve header token parsing speed
 
 2.3.9 / 2017-05-19
 ==================
