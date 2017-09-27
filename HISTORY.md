@@ -2,6 +2,9 @@ unreleased
 ==========
 
   * deps: debug@2.6.9
+  * deps: parseurl@~1.3.2
+    - perf: reduce overhead for full URLs
+    - perf: unroll the "fast-path" `RegExp`
 
 2.3.9 / 2017-05-19
 ==================
