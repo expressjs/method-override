@@ -2,6 +2,12 @@ unreleased
 ==========
 
   * Drop support for Node.js below 0.10
+  * deps: debug@3.1.0
+    - Add `DEBUG_HIDE_DATE` environment variable
+    - Change timer to per-namespace instead of global
+    - Change non-TTY date format
+    - Remove `DEBUG_FD` environment variable support
+    - Support 256 namespace colors
 
 2.3.10 / 2017-09-27
 ===================
