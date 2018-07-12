@@ -1,5 +1,5 @@
-unreleased
-==========
+3.0.0 / 2018-07-11
+==================
 
   * Drop support for Node.js below 0.10
   * deps: debug@3.1.0
