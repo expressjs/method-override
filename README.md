@@ -5,7 +5,7 @@
 [![Build Status][travis-image]][travis-url]
 [![Test Coverage][coveralls-image]][coveralls-url]
 
-Lets you use HTTP verbs such as PUT or DELETE in places where the client doesn't support it.
+Lets you use HTTP verbs such as PUT, PATCH or DELETE in places where the client doesn't support it.
 
 ## Install
 
