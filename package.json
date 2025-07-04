@@ -15,12 +15,12 @@
     "vary": "~1.1.2"
   },
   "devDependencies": {
-    "eslint": "4.19.1",
-    "eslint-config-standard": "11.0.0",
-    "eslint-plugin-import": "2.13.0",
-    "eslint-plugin-markdown": "1.0.0-beta.6",
-    "eslint-plugin-node": "6.0.1",
-    "eslint-plugin-promise": "3.8.0",
+    "eslint": "^8.57.1",
+    "eslint-config-standard": "17.1",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-markdown": "^5.1.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^6.6.0",
     "eslint-plugin-standard": "3.1.0",
     "istanbul": "0.4.5",
     "mocha": "3.5.3",
