@@ -8,6 +8,10 @@
   ],
   "license": "MIT",
   "repository": "expressjs/method-override",
+  "funding": {
+    "type": "opencollective",
+    "url": "https://opencollective.com/express"
+  },
   "dependencies": {
     "debug": "3.1.0",
     "methods": "~1.1.2",
