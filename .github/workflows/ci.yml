@@ -1,0 +1,74 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - master
+    paths-ignore:
+      - '*.md'
+  pull_request:
+    paths-ignore:
+      - '*.md'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: "${{ github.workflow }} ✨ ${{ github.event.pull_request.head.label || github.head_ref || github.ref }}"
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 'lts/*'
+      - name: Install dependencies
+        run: npm install --ignore-scripts --include=dev
+      - name: Run lint
+        run: npm run lint
+
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        node-version: [0.10, 0.12, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]
+
+    name: Node.js ${{ matrix.node-version }} - ${{ matrix.os }}
+    runs-on: ${{ matrix.os }}
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Configure npm loglevel
+        run: npm config set loglevel error
+
+      - name: Install dependencies
+        run: |
+          # Remove dev dependencies that require newer Node.js
+          if [[ "$(node -v | cut -d. -f1 | tr -d 'v')" -lt 4 ]]; then
+            npm rm --save-dev eslint eslint-config-standard eslint-plugin-import eslint-plugin-markdown eslint-plugin-node eslint-plugin-promise eslint-plugin-standard 2>/dev/null || true
+          fi
+          npm install
+
+      - name: Output Node and NPM versions
+        run: |
+          echo "Node.js version: $(node -v)"
+          echo "NPM version: $(npm -v)"
+
+      - name: Run tests
+        run: npm test
