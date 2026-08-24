@@ -1,0 +1,198 @@
+name: ci
+
+on:
+- pull_request
+- push
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    permissions:
+      checks: write  # for coverallsapp/github-action to create new checks
+      contents: read  # for actions/checkout to fetch code
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        name:
+        - Node.js 0.10
+        - Node.js 0.12
+        - io.js 1.x
+        - io.js 2.x
+        - io.js 3.x
+        - Node.js 4.x
+        - Node.js 5.x
+        - Node.js 6.x
+        - Node.js 7.x
+        - Node.js 8.x
+        - Node.js 9.x
+        - Node.js 10.x
+        - Node.js 11.x
+        - Node.js 12.x
+        - Node.js 13.x
+        - Node.js 14.x
+        - Node.js 15.x
+        - Node.js 16.x
+        - Node.js 17.x
+        - Node.js 18.x
+        - Node.js 19.x
+        - Node.js 20.x
+        - Node.js 21.x
+        - Node.js 22.x
+        - Node.js 23.x
+        - Node.js 24.x
+
+        include:
+        - name: Node.js 0.10
+          node-version: "0.10"
+
+        - name: Node.js 0.12
+          node-version: "0.12"
+
+        - name: io.js 1.x
+          node-version: "1.8"
+
+        - name: io.js 2.x
+          node-version: "2.5"
+
+        - name: io.js 3.x
+          node-version: "3.3"
+
+        - name: Node.js 4.x
+          node-version: "4.9"
+
+        - name: Node.js 5.x
+          node-version: "5.12"
+
+        - name: Node.js 6.x
+          node-version: "6.17"
+
+        - name: Node.js 7.x
+          node-version: "7.10"
+
+        - name: Node.js 8.x
+          node-version: "8.17"
+
+        - name: Node.js 9.x
+          node-version: "9.11"
+
+        - name: Node.js 10.x
+          node-version: "10.24"
+
+        - name: Node.js 11.x
+          node-version: "11.15"
+
+        - name: Node.js 12.x
+          node-version: "12.22"
+
+        - name: Node.js 13.x
+          node-version: "13.14"
+
+        - name: Node.js 14.x
+          node-version: "14.21"
+
+        - name: Node.js 15.x
+          node-version: "15.14"
+
+        - name: Node.js 16.x
+          node-version: "16.20"
+
+        - name: Node.js 17.x
+          node-version: "17.9"
+
+        - name: Node.js 18.x
+          node-version: "18.18"
+
+        - name: Node.js 19.x
+          node-version: "19.9"
+
+        - name: Node.js 20.x
+          node-version: "20.9"
+
+        - name: Node.js 21.x
+          node-version: "21.1"
+
+        - name: Node.js 22.x
+          node-version: "22.0"
+
+        - name: Node.js 23.x
+          node-version: "23.11"
+
+        - name: Node.js 24.x
+          node-version: "24.11"
+
+    steps:
+    - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+    - name: Install Node.js ${{ matrix.node-version }}
+      shell: bash -eo pipefail -l {0}
+      run: |
+        nvm install --default ${{ matrix.node-version }}
+        dirname "$(nvm which ${{ matrix.node-version }})" >> "$GITHUB_PATH"
+
+    - name: Configure npm
+      run: |
+        if [[ "$(npm config get package-lock)" == "true" ]]; then
+          npm config set package-lock false
+        else
+          npm config set shrinkwrap false
+        fi
+
+    - name: Setup Node.js version-specific dependencies
+      shell: bash
+      run: |
+        # eslint for linting
+        # - remove on Node.js < 4
+        if [[ "$(cut -d. -f1 <<< "${{ matrix.node-version }}")" -lt 4 ]]; then
+          node -pe 'Object.keys(require("./package").devDependencies).join("\n")' | \
+            grep -E '^eslint(-|$)' | \
+            sort -r | \
+            xargs -n1 npm rm --silent --save-dev
+        fi
+
+    - name: Install Node.js dependencies
+      run: npm install
+
+    - name: List environment
+      id: list_env
+      shell: bash
+      run: |
+        echo "node@$(node -v)"
+        echo "npm@$(npm -v)"
+        npm -s ls ||:
+        (npm -s ls --depth=0 ||:) | awk -F'[ @]' 'NR>1 && $2 { print $2 "=" $3 }' >> "$GITHUB_OUTPUT"
+
+    - name: Run tests
+      shell: bash
+      run: |
+        if npm -ps ls istanbul | grep -q istanbul; then
+          npm run test-ci
+        else
+          npm test
+        fi
+
+    - name: Lint code
+      if: steps.list_env.outputs.eslint != ''
+      run: npm run lint
+
+    - name: Collect code coverage
+      uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
+      if: steps.list_env.outputs.istanbul != ''
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        flag-name: run-${{ matrix.test_number }}
+        parallel: true
+
+  coverage:
+    permissions:
+      checks: write  # for coverallsapp/github-action to create new checks
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Upload code coverage
+      uses: coverallsapp/github-action@8d6379e14d29928660c4ba802d8e85393440b329 # v2.3.8
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        parallel-finished: true
