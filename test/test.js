@@ -1,4 +1,3 @@
-
 var http = require('http')
 var methodOverride = require('..')
 var request = require('supertest')
